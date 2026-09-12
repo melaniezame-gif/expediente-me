@@ -30,3 +30,4 @@ Tagline: Sabe cuándo actuar, a tiempo.
    ```
    npm run dev
    ```
+Built as part of the Generative Core Agent sprint.
