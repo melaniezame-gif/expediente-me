@@ -19,7 +19,7 @@ export default function HomePage() {
             href="/core"
             className="mt-6 inline-block rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
           >
-            Iniciar triage rápido
+            Comenzar diagnóstico
           </a>
         </div>
 
