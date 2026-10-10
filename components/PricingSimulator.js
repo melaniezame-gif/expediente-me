@@ -18,6 +18,8 @@ const FIELD_LABELS = {
   clinicPrice: "Clinic price (MXN / month)",
 };
 
+const SAVED_LIMIT = 12;
+
 const GROUPS = [
   { title: "B2C · Individuals and families", fields: ["b2cUsers", "plusConversion", "plusPrice"] },
   { title: "B2B · Small clinics", fields: ["clinics", "clinicPrice"] },
@@ -43,6 +45,7 @@ export default function PricingSimulator() {
   const result = inputError ? null : calculateRevenue(inputs);
 
   const [saved, setSaved] = useState([]);
+  const [savedTotal, setSavedTotal] = useState(0);
   const [loadingSaved, setLoadingSaved] = useState(true);
   const [loadError, setLoadError] = useState("");
 
@@ -50,13 +53,15 @@ export default function PricingSimulator() {
     setLoadingSaved(true);
     setLoadError("");
     try {
-      const { data, error } = await supabase
+      const { data, error, count } = await supabase
         .from("pricing_scenarios")
-        .select("*")
+        // count: "exact" returns the real number of rows, not just the 12 shown.
+        .select("*", { count: "exact" })
         .order("created_at", { ascending: false })
-        .limit(12);
+        .limit(SAVED_LIMIT);
       if (error) throw error;
       setSaved(data || []);
+      setSavedTotal(count ?? (data || []).length);
     } catch (err) {
       console.error("Load scenarios failed:", err);
       setLoadError(err?.message || String(err));
@@ -283,9 +288,15 @@ export default function PricingSimulator() {
       <section>
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">Saved scenarios</h2>
-          <span className="rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600">
-            {saved.length} saved
-          </span>
+          {/* Fix: the counter used to say "0 saved" while the list was still
+              loading, and could never go above the 12 rows shown. */}
+          {!loadingSaved && !loadError && (
+            <span className="rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600" data-testid="saved-count">
+              {savedTotal > saved.length
+                ? `Showing ${saved.length} of ${savedTotal} saved`
+                : `${savedTotal} saved`}
+            </span>
+          )}
         </div>
         {loadingSaved && <p className="mt-3 text-sm text-gray-500">Loading saved scenarios…</p>}
         {loadError && (
