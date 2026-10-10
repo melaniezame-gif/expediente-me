@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
 import {
   INPUT_FIELDS,
   SCENARIOS,
@@ -40,6 +41,49 @@ export default function PricingSimulator() {
   const inputs = useMemo(() => toNumbers(form), [form]);
   const inputError = validateInputs(inputs);
   const result = inputError ? null : calculateRevenue(inputs);
+
+  const [scenarioName, setScenarioName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState(null);
+
+  async function handleSave(e) {
+    e.preventDefault();
+    if (!result) return;
+    const name = scenarioName.trim();
+    if (!name) {
+      setSaveMessage({ ok: false, text: "Give the scenario a name before saving." });
+      return;
+    }
+
+    setSaving(true);
+    setSaveMessage(null);
+    try {
+      const { data, error } = await supabase
+        .from("pricing_scenarios")
+        .insert({
+          name,
+          scenario_type: scenario,
+          b2c_users: inputs.b2cUsers,
+          plus_conversion: inputs.plusConversion,
+          plus_price: inputs.plusPrice,
+          clinics: inputs.clinics,
+          clinic_price: inputs.clinicPrice,
+          monthly_revenue: result.monthlyRevenue,
+          annual_revenue: result.annualRevenue,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      // The success message shows the row id that Supabase returned, so it is
+      // only shown after the database confirms the insert.
+      setSaveMessage({ ok: true, text: `Saved "${data.name}". Row id: ${data.id}` });
+      setScenarioName("");
+    } catch (err) {
+      console.error("Save scenario failed:", err);
+      setSaveMessage({ ok: false, text: `Save failed: ${err?.message || String(err)}` });
+    }
+    setSaving(false);
+  }
 
   function pickScenario(name) {
     setScenario(name);
@@ -140,8 +184,43 @@ export default function PricingSimulator() {
             <div>Plus: <span className="font-semibold text-white">{result ? formatMXN(result.plusRevenue) : "—"}</span></div>
             <div>Clinic: <span className="font-semibold text-white">{result ? formatMXN(result.clinicRevenue) : "—"}</span></div>
           </div>
+
+          {/* Save scenario */}
+          <form onSubmit={handleSave} className="space-y-2 border-t border-gray-700 pt-4" data-testid="save-scenario">
+            <label htmlFor="scenario-name" className="text-sm text-gray-300">Save this scenario</label>
+            <div className="flex gap-2">
+              <input
+                id="scenario-name"
+                type="text"
+                value={scenarioName}
+                onChange={(e) => setScenarioName(e.target.value)}
+                placeholder="Scenario name"
+                maxLength={80}
+                className="min-w-0 flex-1 rounded-md px-3 py-1.5 text-sm text-gray-900"
+              />
+              <button
+                type="submit"
+                disabled={!result || saving}
+                className="shrink-0 rounded-md bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
+            {saveMessage && (
+              <p className={`text-sm ${saveMessage.ok ? "text-emerald-300" : "text-red-300"}`} role="status">
+                {saveMessage.text}
+              </p>
+            )}
+          </form>
         </div>
       </div>
+
+      {!supabaseConfigOk && (
+        <p className="rounded-md bg-red-50 p-3 text-sm text-red-800">
+          Database configuration error: check the Supabase environment variables in Vercel (no spaces or line
+          breaks) and redeploy.
+        </p>
+      )}
 
       {/* Assumptions table */}
       <section>

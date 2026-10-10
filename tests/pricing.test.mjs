@@ -33,5 +33,6 @@ test("Validation and tiers — bad inputs are rejected, 3 tiers exist", () => {
   assert.notEqual(validateInputs({ ...SCENARIOS.Base, plusConversion: 150 }), "");
   assert.notEqual(validateInputs({ ...SCENARIOS.Base, clinics: -1 }), "");
   assert.notEqual(validateInputs({ ...SCENARIOS.Base, b2cUsers: NaN }), "");
+  assert.notEqual(validateInputs({ ...SCENARIOS.Base, clinics: 2.5 }), "");
   assert.deepEqual(TIERS.map((t) => [t.name, t.price]), [["Free", 0], ["Plus", 79], ["Clinic", 599]]);
 });
