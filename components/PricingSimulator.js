@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
 import {
   INPUT_FIELDS,
@@ -42,6 +42,32 @@ export default function PricingSimulator() {
   const inputError = validateInputs(inputs);
   const result = inputError ? null : calculateRevenue(inputs);
 
+  const [saved, setSaved] = useState([]);
+  const [loadingSaved, setLoadingSaved] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
+  async function loadSaved() {
+    setLoadingSaved(true);
+    setLoadError("");
+    try {
+      const { data, error } = await supabase
+        .from("pricing_scenarios")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(12);
+      if (error) throw error;
+      setSaved(data || []);
+    } catch (err) {
+      console.error("Load scenarios failed:", err);
+      setLoadError(err?.message || String(err));
+    }
+    setLoadingSaved(false);
+  }
+
+  useEffect(() => {
+    loadSaved();
+  }, []);
+
   const [scenarioName, setScenarioName] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState(null);
@@ -78,6 +104,7 @@ export default function PricingSimulator() {
       // only shown after the database confirms the insert.
       setSaveMessage({ ok: true, text: `Saved "${data.name}". Row id: ${data.id}` });
       setScenarioName("");
+      loadSaved();
     } catch (err) {
       console.error("Save scenario failed:", err);
       setSaveMessage({ ok: false, text: `Save failed: ${err?.message || String(err)}` });
@@ -249,6 +276,43 @@ export default function PricingSimulator() {
               )}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* Saved scenarios */}
+      <section>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900">Saved scenarios</h2>
+          <span className="rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600">
+            {saved.length} saved
+          </span>
+        </div>
+        {loadingSaved && <p className="mt-3 text-sm text-gray-500">Loading saved scenarios…</p>}
+        {loadError && (
+          <p className="mt-3 rounded-md bg-red-50 p-3 text-sm text-red-800">
+            Could not load saved scenarios: {loadError}
+          </p>
+        )}
+        {!loadingSaved && !loadError && saved.length === 0 && (
+          <p className="mt-3 rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+            No scenarios saved yet. Name one above and click Save.
+          </p>
+        )}
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="saved-scenarios">
+          {saved.map((s) => (
+            <div key={s.id} className="rounded-lg border border-gray-200 bg-white p-4">
+              <p className="font-semibold text-gray-900">{s.name}</p>
+              <p className="mt-1 font-mono text-sm text-gray-800">
+                {formatMXN(Number(s.monthly_revenue))} / month
+              </p>
+              <p className="font-mono text-xs text-gray-500">{formatMXN(Number(s.annual_revenue))} / year</p>
+              <p className="mt-2 text-xs text-gray-500">
+                {s.scenario_type} · {Number(s.b2c_users).toLocaleString("en-US")} users · {Number(s.plus_conversion)}% ·{" "}
+                {s.clinics} clinics
+              </p>
+              <p className="text-[11px] text-gray-400">{new Date(s.created_at).toLocaleString("en-US")}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>
