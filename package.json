@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test tests/research.test.mjs"
+    "test": "node --test tests/research.test.mjs tests/pricing.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
