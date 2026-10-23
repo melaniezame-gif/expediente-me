@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1600" height="1100" fill="#f7f5f2"/>
+  <text x="40" y="50" font-size="28" font-weight="700" fill="#111827">Vitalis · Week 4 wireframe — Homepage (left) and /marketing (right)</text>
+  <text x="40" y="78" font-size="16" fill="#6b7280">Low-fidelity UX concept drawn before coding. Grey = placeholder content, green = primary action, dashed = live data from Supabase.</text>
+
+  <!-- ===== HOMEPAGE ===== -->
+  <g transform="translate(40,100)">
+    <rect width="680" height="970" rx="14" fill="#fff" stroke="#d1d5db" stroke-width="2"/>
+    <rect width="680" height="44" rx="14" fill="#f3f4f6"/>
+    <text x="20" y="28" font-size="16" font-weight="700" fill="#111827">● Vitalis</text>
+    <text x="300" y="28" font-size="13" fill="#6b7280">How it works · Triage · Research · Product · Pricing · Marketing</text>
+
+    <!-- hero -->
+    <rect x="20" y="64" width="640" height="240" rx="10" fill="#ecfdf5"/>
+    <text x="40" y="94" font-size="12" font-weight="700" fill="#047857">FOR PATIENTS AND CAREGIVERS IN MEXICO</text>
+    <rect x="40" y="108" width="330" height="22" rx="4" fill="#111827"/>
+    <rect x="40" y="136" width="270" height="22" rx="4" fill="#111827"/>
+    <rect x="40" y="172" width="320" height="10" rx="3" fill="#d1d5db"/>
+    <rect x="40" y="188" width="280" height="10" rx="3" fill="#d1d5db"/>
+    <rect x="40" y="214" width="150" height="40" rx="8" fill="#047857"/>
+    <text x="58" y="239" font-size="13" font-weight="700" fill="#fff">CTA text A / B</text>
+    <text x="200" y="239" font-size="12" fill="#b45309">← A/B test 2</text>
+    <text x="40" y="282" font-size="12" fill="#b45309">↑ Headline = A/B test 1 (each visitor gets A or B, 50/50)</text>
+    <rect x="460" y="96" width="180" height="180" rx="10" fill="#fff" stroke="#d1d5db"/>
+    <text x="474" y="120" font-size="12" font-weight="700" fill="#111827">Product preview</text>
+    <rect x="474" y="134" width="46" height="34" rx="6" fill="#dcfce7"/>
+    <rect x="526" y="134" width="46" height="34" rx="6" fill="#fef3c7"/>
+    <rect x="578" y="134" width="46" height="34" rx="6" fill="#fee2e2"/>
+    <rect x="474" y="182" width="150" height="8" rx="3" fill="#e5e7eb"/>
+    <rect x="474" y="198" width="120" height="8" rx="3" fill="#e5e7eb"/>
+
+    <!-- problem stats -->
+    <text x="20" y="338" font-size="14" font-weight="700" fill="#111827">The problem (3 stats from /research)</text>
+    <g font-size="20" font-weight="800" fill="#047857">
+      <rect x="20" y="350" width="200" height="90" rx="8" fill="#fff" stroke="#d1d5db"/><text x="36" y="384">40.5%</text>
+      <rect x="240" y="350" width="200" height="90" rx="8" fill="#fff" stroke="#d1d5db"/><text x="256" y="384">65%</text>
+      <rect x="460" y="350" width="200" height="90" rx="8" fill="#fff" stroke="#d1d5db"/><text x="476" y="384">18,000</text>
+    </g>
+    <g fill="#e5e7eb"><rect x="36" y="400" width="160" height="8" rx="3"/><rect x="256" y="400" width="160" height="8" rx="3"/><rect x="476" y="400" width="160" height="8" rx="3"/></g>
+
+    <!-- how it works -->
+    <text x="20" y="478" font-size="14" font-weight="700" fill="#111827">How it works — 3 steps</text>
+    <g fill="#fff" stroke="#d1d5db"><rect x="20" y="490" width="200" height="80" rx="8"/><rect x="240" y="490" width="200" height="80" rx="8"/><rect x="460" y="490" width="200" height="80" rx="8"/></g>
+    <g font-size="13" fill="#374151"><text x="36" y="516">1. Enter 4 readings</text><text x="256" y="516">2. Get your light</text><text x="476" y="516">3. Save + share</text></g>
+
+    <!-- plans -->
+    <text x="20" y="608" font-size="14" font-weight="700" fill="#111827">Plans teaser (from /product)</text>
+    <g fill="#fff" stroke="#d1d5db"><rect x="20" y="620" width="200" height="90" rx="8"/><rect x="460" y="620" width="200" height="90" rx="8"/></g>
+    <rect x="240" y="620" width="200" height="90" rx="8" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+    <g font-size="13" font-weight="700" fill="#111827"><text x="36" y="646">Free · $0</text><text x="256" y="646">Plus · $79</text><text x="476" y="646">Clinic · $599</text></g>
+
+    <!-- trust + faq -->
+    <text x="20" y="748" font-size="14" font-weight="700" fill="#111827">Trust + FAQ (4 questions, expandable)</text>
+    <g fill="#fff" stroke="#d1d5db"><rect x="20" y="760" width="640" height="34" rx="6"/><rect x="20" y="800" width="640" height="34" rx="6"/><rect x="20" y="840" width="640" height="34" rx="6"/></g>
+    <g font-size="12" fill="#6b7280"><text x="34" y="782">▸ Is this a diagnosis?</text><text x="34" y="822">▸ Do I need an account?</text><text x="34" y="862">▸ How is the light calculated?</text></g>
+
+    <rect x="20" y="892" width="640" height="60" rx="10" fill="#111827"/>
+    <text x="40" y="928" font-size="15" font-weight="700" fill="#fff">Final CTA band — "Know when to act, in time."</text>
+    <rect x="520" y="906" width="120" height="32" rx="6" fill="#047857"/>
+  </g>
+
+  <!-- ===== /MARKETING ===== -->
+  <g transform="translate(760,100)">
+    <rect width="800" height="970" rx="14" fill="#fff" stroke="#d1d5db" stroke-width="2"/>
+    <rect width="800" height="44" rx="14" fill="#f3f4f6"/>
+    <text x="20" y="28" font-size="16" font-weight="700" fill="#111827">/marketing — Marketing engine</text>
+
+    <!-- dashboard widget -->
+    <g>
+      <rect x="20" y="60" width="760" height="70" rx="10" fill="#fff" stroke="#047857" stroke-dasharray="6 4" stroke-width="2"/>
+      <text x="36" y="84" font-size="12" font-weight="700" fill="#047857">DASHBOARD WIDGET (live from Supabase)</text>
+      <g font-size="13" fill="#374151"><text x="36" y="112">Assets saved: n</text><text x="196" y="112">A/B visitors: n</text><text x="356" y="112">Test 1 leader: A/B</text><text x="536" y="112">Test 2 leader: A/B</text></g>
+    </g>
+
+    <!-- brand + persona -->
+    <rect x="20" y="146" width="370" height="200" rx="10" fill="#fff" stroke="#d1d5db"/>
+    <text x="36" y="172" font-size="14" font-weight="700" fill="#111827">Brand system</text>
+    <g><rect x="36" y="186" width="44" height="44" rx="6" fill="#047857"/><rect x="88" y="186" width="44" height="44" rx="6" fill="#111827"/><rect x="140" y="186" width="44" height="44" rx="6" fill="#f7f5f2" stroke="#d1d5db"/><rect x="192" y="186" width="44" height="44" rx="6" fill="#16a34a"/><rect x="244" y="186" width="44" height="44" rx="6" fill="#f59e0b"/><rect x="296" y="186" width="44" height="44" rx="6" fill="#dc2626"/></g>
+    <g fill="#e5e7eb"><rect x="36" y="246" width="300" height="10" rx="3"/><rect x="36" y="264" width="260" height="10" rx="3"/><rect x="36" y="290" width="140" height="44" rx="6"/><rect x="190" y="290" width="140" height="44" rx="6"/></g>
+    <text x="44" y="316" font-size="11" fill="#374151">Voice: DO</text><text x="198" y="316" font-size="11" fill="#374151">Voice: DON'T</text>
+
+    <rect x="410" y="146" width="370" height="200" rx="10" fill="#fff" stroke="#d1d5db"/>
+    <text x="426" y="172" font-size="14" font-weight="700" fill="#111827">Target persona</text>
+    <circle cx="456" cy="214" r="26" fill="#d1d5db"/>
+    <text x="494" y="208" font-size="13" font-weight="700" fill="#111827">Daniela, 38, CDMX</text>
+    <text x="494" y="226" font-size="12" fill="#6b7280">Caregiver for her father</text>
+    <g fill="#e5e7eb"><rect x="426" y="256" width="330" height="8" rx="3"/><rect x="426" y="272" width="300" height="8" rx="3"/><rect x="426" y="288" width="320" height="8" rx="3"/><rect x="426" y="304" width="280" height="8" rx="3"/></g>
+
+    <!-- A/B tester -->
+    <rect x="20" y="362" width="760" height="170" rx="10" fill="#fff" stroke="#d1d5db"/>
+    <text x="36" y="388" font-size="14" font-weight="700" fill="#111827">A/B tester — 2 tests</text>
+    <rect x="36" y="400" width="350" height="116" rx="8" fill="#f9fafb" stroke="#047857" stroke-dasharray="6 4"/>
+    <rect x="404" y="400" width="360" height="116" rx="8" fill="#f9fafb" stroke="#047857" stroke-dasharray="6 4"/>
+    <g font-size="12" fill="#374151"><text x="50" y="424">Test 1 · Hero headline</text><text x="418" y="424">Test 2 · CTA button text</text>
+      <text x="50" y="448">A  views · clicks · CTR  ████░░</text><text x="50" y="470">B  views · clicks · CTR  ██████</text>
+      <text x="418" y="448">A  views · clicks · CTR  █████░</text><text x="418" y="470">B  views · clicks · CTR  ███░░░</text>
+      <text x="50" y="500" fill="#b45309">Verdict: winner / keep running (n &lt; 30)</text><text x="418" y="500" fill="#b45309">[Preview A] [Preview B] [Refresh]</text></g>
+
+    <!-- content cards -->
+    <text x="20" y="562" font-size="14" font-weight="700" fill="#111827">Content library — 10 posts + 3 video scripts + landing copy</text>
+    <g font-size="11" fill="#374151">
+      <rect x="20" y="574" width="760" height="30" rx="6" fill="#f3f4f6"/>
+      <text x="32" y="594">[All] [Instagram] [TikTok] [Facebook] [LinkedIn] [X] [WhatsApp] [Video scripts]     search…</text>
+    </g>
+    <g>
+      <rect x="20" y="616" width="240" height="150" rx="8" fill="#fff" stroke="#d1d5db"/>
+      <rect x="280" y="616" width="240" height="150" rx="8" fill="#fff" stroke="#d1d5db"/>
+      <rect x="540" y="616" width="240" height="150" rx="8" fill="#fff" stroke="#d1d5db"/>
+      <g font-size="11" fill="#047857" font-weight="700"><text x="34" y="638">INSTAGRAM · EDUCATE</text><text x="294" y="638">TIKTOK · PROBLEM</text><text x="554" y="638">VIDEO SCRIPT · 35s</text></g>
+      <g fill="#e5e7eb"><rect x="34" y="650" width="200" height="8" rx="3"/><rect x="34" y="666" width="180" height="8" rx="3"/><rect x="34" y="682" width="190" height="8" rx="3"/><rect x="294" y="650" width="200" height="8" rx="3"/><rect x="294" y="666" width="170" height="8" rx="3"/><rect x="554" y="650" width="200" height="8" rx="3"/><rect x="554" y="666" width="160" height="8" rx="3"/></g>
+      <g font-size="11" font-weight="700"><rect x="34" y="728" width="60" height="26" rx="5" fill="#f3f4f6"/><text x="46" y="745" fill="#111827">Copy</text><rect x="102" y="728" width="60" height="26" rx="5" fill="#047857"/><text x="114" y="745" fill="#fff">Save</text>
+      <rect x="294" y="728" width="60" height="26" rx="5" fill="#f3f4f6"/><text x="306" y="745" fill="#111827">Copy</text><rect x="362" y="728" width="60" height="26" rx="5" fill="#047857"/><text x="374" y="745" fill="#fff">Save</text>
+      <rect x="554" y="728" width="60" height="26" rx="5" fill="#f3f4f6"/><text x="566" y="745" fill="#111827">Copy</text><rect x="622" y="728" width="60" height="26" rx="5" fill="#047857"/><text x="634" y="745" fill="#fff">Save</text></g>
+    </g>
+
+    <!-- calendar -->
+    <text x="20" y="796" font-size="14" font-weight="700" fill="#111827">14-day campaign calendar</text>
+    <rect x="620" y="780" width="160" height="26" rx="5" fill="#f3f4f6"/><text x="634" y="798" font-size="11" font-weight="700" fill="#111827">Export CSV · Export .md</text>
+    <g fill="#fff" stroke="#d1d5db">
+      <rect x="20" y="814" width="102" height="56" rx="6"/><rect x="128" y="814" width="102" height="56" rx="6"/><rect x="236" y="814" width="102" height="56" rx="6"/><rect x="344" y="814" width="102" height="56" rx="6"/><rect x="452" y="814" width="102" height="56" rx="6"/><rect x="560" y="814" width="102" height="56" rx="6"/><rect x="668" y="814" width="102" height="56" rx="6"/>
+      <rect x="20" y="876" width="102" height="56" rx="6"/><rect x="128" y="876" width="102" height="56" rx="6"/><rect x="236" y="876" width="102" height="56" rx="6"/><rect x="344" y="876" width="102" height="56" rx="6"/><rect x="452" y="876" width="102" height="56" rx="6"/><rect x="560" y="876" width="102" height="56" rx="6"/><rect x="668" y="876" width="102" height="56" rx="6"/>
+    </g>
+    <g font-size="11" fill="#6b7280"><text x="28" y="832">Day 1</text><text x="136" y="832">Day 2</text><text x="244" y="832">Day 3</text><text x="352" y="832">…</text><text x="28" y="894">Day 8</text><text x="676" y="894">Day 14</text></g>
+
+    <!-- saved -->
+    <rect x="20" y="944" width="760" height="18" rx="4" fill="#fff" stroke="#047857" stroke-dasharray="6 4"/>
+    <text x="30" y="957" font-size="11" fill="#047857">Saved marketing assets (Supabase marketing_assets, newest first, real row id shown after save)</text>
+  </g>
+</svg>
