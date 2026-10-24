@@ -55,9 +55,9 @@ export default function ABTester({ events, loading, error, onRefresh }) {
                 <thead className="text-xs text-gray-500">
                   <tr>
                     <th className="pb-2 font-medium">Variant</th>
-                    <th className="pb-2 text-right font-medium">Views</th>
-                    <th className="pb-2 text-right font-medium">Clicks</th>
-                    <th className="pb-2 text-right font-medium">CTR</th>
+                    <th className="w-14 pb-2 pl-3 text-right font-medium">Views</th>
+                    <th className="w-14 pb-2 pl-3 text-right font-medium">Clicks</th>
+                    <th className="w-14 pb-2 pl-3 text-right font-medium">CTR</th>
                   </tr>
                 </thead>
                 <tbody className="align-top">

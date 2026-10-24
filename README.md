@@ -12,6 +12,8 @@ Live: https://expediente-me-wine.vercel.app
 |---|---|
 | `/core` | Week 1 — rule-based triage (temperature, heart rate, SpO₂, pain) saved to Supabase `core_outputs` |
 | `/research` | Week 2 — research + benchmarking dashboard: 5 global examples, Mexico localization, 8 competitors/substitutes with search and filter, benchmark cards, risk map, research intake saved to Supabase `research_records`, dashboard widget |
+| `/` | Week 4 — landing page with 2 live A/B tests (hero headline, CTA text) logged to Supabase `ab_events` |
+| `/marketing` | Week 4 — marketing engine: brand system, persona, landing copy, 10 social posts, 3 video scripts, 14-day calendar, A/B tester, Copy/Save/Export, saved assets in `marketing_assets`, dashboard widget |
 | `/docs` | Coding-agent prompt log |
 
 ## Tech stack
@@ -31,9 +33,9 @@ Live: https://expediente-me-wine.vercel.app
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key, pasted once, no spaces>
    ```
 
-3. Run `supabase_setup.sql` and `supabase_research.sql` in the Supabase SQL Editor.
+3. Run `supabase_setup.sql`, `supabase_research.sql`, `supabase_pricing.sql` and `supabase_marketing.sql` in the Supabase SQL Editor.
 4. `npm run dev`
-5. `npm test` runs the 3 automated tests (Node's built-in test runner).
+5. `npm test` runs the automated tests (Node's built-in test runner).
 
 ## Lesson from Week 1
 
