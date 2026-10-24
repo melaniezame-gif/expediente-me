@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
-import { analyzeABTest, summarizeEvents } from "@/lib/abTest";
+import { INTERNAL_KEY, analyzeABTest, summarizeEvents } from "@/lib/abTest";
 import { downloadFile } from "@/lib/browserUtils";
 import { AB_TESTS, BRAND, PERSONA, toCSV } from "@/lib/marketingData";
 import ABTester from "@/components/ABTester";
@@ -78,6 +78,12 @@ export default function MarketingEngine() {
   }
 
   useEffect(() => {
+    // Whoever opens /marketing is on the team: stop counting their homepage visits.
+    try {
+      window.localStorage.setItem(INTERNAL_KEY, "1");
+    } catch {
+      // storage blocked: nothing to mark
+    }
     loadAssets();
     loadEvents();
   }, []);

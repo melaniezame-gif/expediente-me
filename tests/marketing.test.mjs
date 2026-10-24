@@ -1,7 +1,7 @@
 // Week 4 marketing tests. Run with: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyzeABTest, assignVariant, summarizeEvents } from "../lib/abTest.js";
+import { analyzeABTest, assignVariant, isInternalVisit, summarizeEvents } from "../lib/abTest.js";
 import {
   AB_TESTS,
   CALENDAR,
@@ -42,6 +42,12 @@ test("Marketing test M2 — variant assignment and unique-visitor counting", () 
   assert.equal(assignVariant({ stored: "B", random: () => 0.1 }), "B"); // sticky
   assert.equal(assignVariant({ override: "a", stored: "B" }), "A"); // ?ab=a forces A
   assert.equal(assignVariant({ override: "Z", stored: "B" }), "B"); // bad override ignored
+
+  // Team browsers are excluded; ?internal=0 opts back in.
+  assert.equal(isInternalVisit({}), false);
+  assert.equal(isInternalVisit({ storedFlag: "1" }), true);
+  assert.equal(isInternalVisit({ param: "1" }), true);
+  assert.equal(isInternalVisit({ storedFlag: "1", param: "0" }), false);
 
   const events = [
     { test_id: "hero_headline", variant: "A", event: "view", visitor_id: "v1" },
