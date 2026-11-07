@@ -19,6 +19,14 @@ const WEEK5_PROMPTS = [
     title: "5 · Fix the bugs found",
     text: `Three bugs from the browser test: (1) a blocked question (medication/diagnosis) or "Talk to a person" in the middle of the intake left the user with no buttons — re-ask the current question; (2) a message that was only a CURP got the privacy note AND an off-topic reply — the privacy note is enough; (3) suggested questions disappeared after the first question — show them as persistent chips during free Q&A. Also give the hand-off message its own "Human help" style instead of "Safety".`,
   },
+  {
+    title: "6 · Fix from external user test U2",
+    text: `External tester U2 (on her phone) typed a phone number at question 1 and got the privacy note AND "Sorry, I didn't catch that"; then "What's your name" was ignored with "didn't catch that". During the 3 intake questions: if the message was only personal data, show the privacy note and ask the question again; if it matches a curated answer, answer it, say "Now, back to the check:" and ask again; otherwise give a clearer hint. Add "your name" to the about answer and regression tests to C2.`,
+  },
+  {
+    title: "7 · Change from external user test U3",
+    text: `External tester U3 said that with Vitalis "now I don't have to go to the doctor for any minor symptoms". That is a dangerous misreading. Add to every Stable result: Stable only describes these 4 readings right now and doesn't replace a doctor; book a check-up if a symptom lasts more than 2–3 days, keeps coming back or worries you. Add a test.`,
+  },
 ];
 
 const WEEK4_PROMPTS = [
