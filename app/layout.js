@@ -9,6 +9,7 @@ export const metadata = {
 const navLinks = [
   { label: "How it works", href: "/#how-it-works" },
   { label: "Triage", href: "/core" },
+  { label: "Chat", href: "/chat" },
   { label: "Research", href: "/research" },
   { label: "Product", href: "/product" },
   { label: "Pricing", href: "/pricing" },
