@@ -168,6 +168,8 @@ test("Chat test C3 — response logic matches /core, answers come from curated i
   assert.ok(attention.state.reasons.includes("attention_result"));
   const stable = play([...INTAKE, text("37.0 80 98 1"), choice("confirm")]);
   assert.deepEqual(stable.state.reasons, []);
+  // after user test U3: Stable must say it doesn't replace a doctor
+  assert.match(stable.bots.find((m) => m.kind === "result").text, /doesn't replace a doctor/);
   const rated = play([...INTAKE, text("37.0 80 98 1"), choice("confirm"), { type: "rate", rating: -1 }, { type: "human" }]);
   assert.deepEqual(rated.state.reasons, ["negative_feedback", "user_requested_human"]);
 
