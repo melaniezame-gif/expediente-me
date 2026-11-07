@@ -1,3 +1,26 @@
+const WEEK5_PROMPTS = [
+  {
+    title: "1 · Build Discipline Packet first (Gate 1)",
+    text: `Before writing any code, write docs/WEEK5_BUILD_PACKET.md for a /chat guided assistant: problem, user, success, UX concept with a wireframe image, scope cut (no LLM, no live nurse hand-off, no reviewer login), product spec with testable acceptance criteria, architecture with data flow, tech stack, DevOps, test plan (3 software + 3 external user tests) and the exact coding prompt. Commit it on its own.`,
+  },
+  {
+    title: "2 · Chat engine, guardrails and tests",
+    text: `Create lib/chatbot.js — pure, no React, no network: checkGuardrails with priority self-harm > emergency > minor > medication > diagnosis, simple negation ("no chest pain" must not fire), redactPII for CURP / phone / email; a reducer reduceChat for Q1 who → Q2 age → Q3 red flags → vitals → human checkpoint (Confirm / Edit) → result with calculateTriage from lib/triage.js → free Q&A; parseVitals + validateVitals with safe ranges; matchIntent over curated human-written answers with an honest fallback; reviewReasons and buildSessionSummary (redacted). Write supabase_chat.sql (chat_sessions, chat_feedback, RLS insert/select for anon) and 3 node:test tests.`,
+  },
+  {
+    title: "3 · /chat page: message UI, intake, ratings, save",
+    text: `Build /chat: a ChatAssistant with bot/user bubbles, choice buttons only on the latest question, an inline vitals form, a text box (Enter sends), Talk to a person and Restart, different styles for Safety / Emergency (Call 911 link) / Human checkpoint / Result, 👍/👎 on every answer saved to chat_feedback, and "Finish & save test summary" (tester code, 1–5 stars, comment) inserting into chat_sessions and showing the returned row id — or the real error. Add a ChatInsights side panel (widget, human review queue with transcript, recent summaries) and "Chat" to the nav.`,
+  },
+  {
+    title: "4 · Test in a real browser and fix what breaks",
+    text: `Run the production build and drive /chat in headless Chrome at 1280 px and 390 px: buttons path, typed path ("me", "I'm 34", "none", "37.5 105 93 5", "yes"), impossible vitals, medication, CURP, off-topic, emergency, negation, self-harm, Talk to a person, thumbs and save. Fix every problem found and add a regression test for each.`,
+  },
+  {
+    title: "5 · Fix the bugs found",
+    text: `Three bugs from the browser test: (1) a blocked question (medication/diagnosis) or "Talk to a person" in the middle of the intake left the user with no buttons — re-ask the current question; (2) a message that was only a CURP got the privacy note AND an off-topic reply — the privacy note is enough; (3) suggested questions disappeared after the first question — show them as persistent chips during free Q&A. Also give the hand-off message its own "Human help" style instead of "Safety".`,
+  },
+];
+
 const WEEK4_PROMPTS = [
   {
     title: "1 · Content system + A/B logic + tests",
@@ -52,7 +75,15 @@ export default function DocsPage() {
         Prompts sent to the coding agent (Claude) to build this project.
       </p>
 
-      <h2 className="mt-8 text-lg font-semibold text-gray-900">Week 4 — /marketing + homepage</h2>
+      <h2 className="mt-8 text-lg font-semibold text-gray-900">Week 5 — /chat guided assistant</h2>
+      {WEEK5_PROMPTS.map((p) => (
+        <div key={p.title} className="mt-4 rounded-lg border border-gray-200 bg-white p-5">
+          <h3 className="text-sm font-semibold text-gray-900">{p.title}</h3>
+          <p className="mt-2 whitespace-pre-line text-sm text-gray-700">{p.text}</p>
+        </div>
+      ))}
+
+      <h2 className="mt-10 text-lg font-semibold text-gray-900">Week 4 — /marketing + homepage</h2>
       {WEEK4_PROMPTS.map((p) => (
         <div key={p.title} className="mt-4 rounded-lg border border-gray-200 bg-white p-5">
           <h3 className="text-sm font-semibold text-gray-900">{p.title}</h3>
