@@ -120,6 +120,16 @@ test("Chat test C2 — intake flow: 3 questions, vitals validation, human checkp
   assert.equal(humanMid.bots.at(-2).intent, "human_handoff");
   assert.match(humanMid.last.text, /Question 3 of 3/);
 
+  // Found by external tester U2: personal data or a question during the intake
+  const phoneQ1 = play([{ type: "start" }, text("My phone number is 55 1234 5678")]);
+  assert.equal(phoneQ1.bots.some((m) => /didn't catch/.test(m.text)), false);
+  assert.equal(phoneQ1.bots.at(-2).intent, "guardrail_pii");
+  assert.match(phoneQ1.last.text, /Question 1 of 3/);
+  const nameQ1 = play([{ type: "start" }, text("What’s your name")]);
+  assert.ok(nameQ1.bots.some((m) => m.intent === "about"));
+  assert.match(nameQ1.last.text, /Question 1 of 3/);
+  assert.equal(nameQ1.state.step, "q1");
+
   // under 18 is routed away
   const minor = play([{ type: "start" }, choice("other"), choice("under18")]);
   assert.equal(minor.last.intent, "guardrail_minor");
