@@ -29,6 +29,10 @@ export default function ChatInsights({ refreshKey }) {
   useEffect(() => {
     let cancelled = false;
     async function load() {
+      if (!supabaseConfigOk) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError(null);
       try {

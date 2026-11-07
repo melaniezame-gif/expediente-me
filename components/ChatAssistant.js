@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
 import {
+  SUGGESTED_QUESTIONS,
   VITAL_RANGES,
   buildFeedbackRow,
   buildSessionSummary,
@@ -150,8 +151,24 @@ export default function ChatAssistant({ onSaved }) {
         )}
       </div>
 
+      {/* Quick questions stay visible during free Q&A (they used to disappear after the first question). */}
+      {state.step === "open" && (
+        <div className="flex gap-2 overflow-x-auto border-t border-gray-200 bg-gray-50 px-3 pt-3 sm:flex-wrap sm:px-4" data-testid="quick-questions">
+          {SUGGESTED_QUESTIONS.map((q) => (
+            <button
+              key={q}
+              type="button"
+              onClick={() => dispatch({ type: "text", text: q })}
+              className="shrink-0 rounded-full border border-emerald-700 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-50"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Input */}
-      <form onSubmit={send} className="flex gap-2 border-t border-gray-200 bg-gray-50 px-3 py-3 sm:px-4">
+      <form onSubmit={send} className={`flex gap-2 bg-gray-50 ${state.step === "open" ? "" : "border-t border-gray-200"} px-3 py-3 sm:px-4`}>
         <label htmlFor="chat-input" className="sr-only">
           Message
         </label>
@@ -190,6 +207,9 @@ function BotMessage({ message: m, active, rating, onRate, onChoice, onVitals }) 
   } else if (m.kind === "emergency") {
     box = "border-2 border-red-600 bg-red-50";
     label = <span className="text-red-700">{m.intent === "guardrail_self_harm" ? "You're not alone" : "Emergency"}</span>;
+  } else if (m.kind === "handoff") {
+    box = "border-2 border-gray-900 bg-white";
+    label = <span className="text-gray-900">Human help</span>;
   } else if (m.kind === "checkpoint") {
     box = "border-2 border-gray-900 bg-white";
     label = <span className="text-gray-900">Human checkpoint</span>;

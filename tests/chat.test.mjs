@@ -62,6 +62,11 @@ test("Chat test C1 — guardrails fire with the right priority, handle negation 
   const off = play([...INTAKE, { type: "vitals", values: { temperature: 37, heartRate: 80, oxygenSaturation: 98, painLevel: 1 } }, choice("confirm"), text("what's the weather tomorrow?")]);
   assert.equal(off.last.intent, "guardrail_off_topic");
   assert.ok(off.state.guardrails.includes("off_topic"));
+
+  // a message that is only personal data gets the privacy note, not an extra off-topic reply
+  const onlyPII = play([...INTAKE, text("37.0 80 98 1"), choice("confirm"), text("my CURP is GODE561231HDFRRN09")]);
+  assert.equal(onlyPII.last.intent, "guardrail_pii");
+  assert.equal(onlyPII.state.guardrails.includes("off_topic"), false);
 });
 
 test("Chat test C2 — intake flow: 3 questions, vitals validation, human checkpoint before any result", () => {
@@ -106,6 +111,14 @@ test("Chat test C2 — intake flow: 3 questions, vitals validation, human checkp
   assert.match(emergency.last.text, /911/);
   assert.equal(emergency.bots.some((m) => m.form === "vitals"), false);
   assert.ok(emergency.state.reasons.includes("emergency"));
+
+  // a blocked question or "Talk to a person" during the intake re-asks the current question
+  const medMid = play([{ type: "start" }, choice("self"), text("can I take ibuprofen?")]);
+  assert.equal(medMid.state.step, "q2");
+  assert.match(medMid.last.text, /Question 2 of 3/);
+  const humanMid = play([{ type: "start" }, choice("self"), choice("18-64"), { type: "human" }]);
+  assert.equal(humanMid.bots.at(-2).intent, "human_handoff");
+  assert.match(humanMid.last.text, /Question 3 of 3/);
 
   // under 18 is routed away
   const minor = play([{ type: "start" }, choice("other"), choice("under18")]);
