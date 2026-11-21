@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
-import { SITE_TEST_TARGET, WOULD_USE, buildSiteTestRow, summarizeSiteTests, validateSiteTest } from "@/lib/dashboard";
+import { SITE_TEST_TARGET, WOULD_USE, isFounderTest, buildSiteTestRow, summarizeSiteTests, validateSiteTest } from "@/lib/dashboard";
 import { MANUAL_CHECKS, REGRESSION_RUNS, SOFTWARE_SUITES } from "@/lib/testingLog";
 
 const EMPTY = {
@@ -158,7 +158,7 @@ export default function DemoTesting() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {rows.map((r) => (
+                {rows.filter((r) => !isFounderTest(r)).map((r) => (
                   <tr key={r.id}>
                     <td className="px-3 py-2 font-medium">{r.tester_label || "—"}</td>
                     <td className="px-3 py-2">{r.device || "—"}</td>

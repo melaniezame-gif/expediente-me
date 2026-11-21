@@ -126,6 +126,7 @@ test("S3 — agents, impact, roadmap, viability and the external tester form", (
     { tester_label: "U4", ease: 5, trust: 4, task_completed: true, would_use: "yes", device: "phone", comment: "Clear" },
     { tester_label: "U5", ease: 4, trust: 5, task_completed: true, would_use: "maybe", device: "laptop", confusing: "Where is Save?" },
     { tester_label: "U6", ease: 3, trust: 3, task_completed: false, would_use: "yes", device: "phone" },
+    { tester_label: "test", ease: 1, trust: 1, task_completed: false, would_use: "no", device: "laptop" }, // founder check, ignored
   ]);
   assert.equal(summary.count, 3);
   assert.equal(summary.targetMet, false);
