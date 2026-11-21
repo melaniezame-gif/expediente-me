@@ -1,12 +1,12 @@
 import DemoTour from "@/components/DemoTour";
 import DemoTesting from "@/components/DemoTesting";
-import { AGENTS } from "@/lib/siteMap";
+import { AGENTS, BEHIND_THE_SCENES } from "@/lib/siteMap";
 import { HARMS, ROADMAP, VALUE, VIABILITY_NOTES, viabilitySnapshot } from "@/lib/impact";
 import { formatMXN } from "@/lib/pricing";
 
 export const metadata = {
   title: "Demo — Vitalis",
-  description: "A 5-minute guided walkthrough of the whole Vitalis venture: agent map, impact check, testing summary and V2 roadmap.",
+  description: "Try Vitalis in 5 steps, then see the agent map, impact check, testing summary and V2 roadmap.",
 };
 
 const KIND_STYLE = {
@@ -20,13 +20,6 @@ const HARM_STATUS = {
   "Partly mitigated": "bg-amber-100 text-amber-900",
 };
 
-const JUMPS = [
-  ["#agent-map", "Agent map"],
-  ["#impact", "Impact check"],
-  ["#roadmap", "V2 roadmap"],
-  ["#testing", "Testing summary"],
-  ["#tester-form", "I finished the walkthrough"],
-];
 
 export default function DemoPage() {
   const viability = viabilitySnapshot();
@@ -34,21 +27,29 @@ export default function DemoPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Week 6 · Integrated agentic venture</p>
-      <h1 className="mt-1 text-2xl font-bold text-gray-900">Guided walkthrough: Vitalis in 5 minutes</h1>
-      <p className="mt-2 max-w-3xl text-sm text-gray-600">
-        Vitalis helps caregivers and adults in Mexico decide, in under a minute, whether a vital-signs reading taken at home
-        is urgent. Follow the 7 steps below — each one opens a live part of the site — then see who does what (agent map),
-        whether it helps without hurting (impact check), what comes next and how real people rated it.
+      <h1 className="mt-1 text-2xl font-bold text-gray-900 md:text-3xl">Guided walkthrough: try Vitalis in 5 steps</h1>
+      <p className="mt-2 max-w-2xl text-base text-gray-700">
+        Vitalis tells you, in under a minute, whether a vital-signs reading taken at home is urgent. This short tour shows
+        you how — one simple thing to do on each page.
       </p>
-      <nav aria-label="On this page" className="mt-4 flex flex-wrap gap-2 text-sm">
-        {JUMPS.map(([href, label]) => (
-          <a key={href} href={href} className="rounded-full border border-gray-300 bg-white px-3 py-1 text-gray-700 hover:border-gray-500">
-            {label}
-          </a>
-        ))}
-      </nav>
 
       <DemoTour />
+
+      <DemoTesting />
+
+      <section aria-label="Behind the scenes" className="mt-10">
+        <h2 className="text-xl font-bold text-gray-900">Behind the scenes</h2>
+        <p className="mt-1 text-sm text-gray-600">The business side of the venture, built in Weeks 2–5 — not part of the user tour.</p>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+          {BEHIND_THE_SCENES.map((l) => (
+            <li key={l.href}>
+              <a href={l.href} className="block rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 hover:border-gray-400">
+                {l.label} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* ---------- Agent map ---------- */}
       <section id="agent-map" className="mt-14 scroll-mt-6">
@@ -227,8 +228,6 @@ export default function DemoPage() {
           ))}
         </div>
       </section>
-
-      <DemoTesting />
     </div>
   );
 }

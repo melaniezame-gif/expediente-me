@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
 import { SITE_TEST_TARGET, WOULD_USE, isFounderTest, buildSiteTestRow, summarizeSiteTests, validateSiteTest } from "@/lib/dashboard";
+import { DEMO_STEPS } from "@/lib/siteMap";
 import { MANUAL_CHECKS, REGRESSION_RUNS, SOFTWARE_SUITES } from "@/lib/testingLog";
 
 const EMPTY = {
   tester_label: "",
   device: "phone",
-  steps_completed: "7",
+  steps_completed: "5",
   task_completed: null,
   ease: "",
   trust: "",
@@ -112,113 +113,9 @@ export default function DemoTesting() {
 
   return (
     <>
-      {/* ---------- Testing summary ---------- */}
-      <section id="testing" className="mt-14 scroll-mt-6">
-        <h2 className="text-xl font-bold text-gray-900">Testing summary</h2>
-        <p className="mt-1 max-w-3xl text-sm text-gray-600">
-          External users test the whole site from this page on their own device; their answers are read live from Supabase{" "}
-          <code>site_tests</code>. Nothing here is typed in by hand.
-        </p>
-
-        {loadError ? (
-          <p className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">
-            Could not read site_tests: {loadError}
-          </p>
-        ) : null}
-
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5" data-testid="testing-tiles">
-          {[
-            ["External testers", loading ? "…" : `${s.count} / ${s.target}`, s.targetMet ? "Target met" : "Target: 5"],
-            ["Completed the task", `${s.completedPct}%`, ""],
-            ["Ease (1–5)", s.count ? s.avgEase : "—", "average"],
-            ["Trust (1–5)", s.count ? s.avgTrust : "—", "average"],
-            ["Would use it", `${s.wouldUsePct}%`, "answered “yes”"],
-          ].map(([label, value, note]) => (
-            <div key={label} className="rounded-xl border border-gray-200 bg-white p-4">
-              <p className="text-xs font-medium text-gray-500">{label}</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
-              {note ? <p className="mt-1 text-xs text-gray-500">{note}</p> : null}
-            </div>
-          ))}
-        </div>
-
-        {rows.length > 0 ? (
-          <div className="mt-4 overflow-x-auto rounded-xl border border-gray-200 bg-white">
-            <table className="w-full min-w-[640px] text-left text-sm">
-              <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
-                <tr>
-                  <th className="px-3 py-2">Tester</th>
-                  <th className="px-3 py-2">Device</th>
-                  <th className="px-3 py-2">Steps</th>
-                  <th className="px-3 py-2">Task</th>
-                  <th className="px-3 py-2">Ease</th>
-                  <th className="px-3 py-2">Trust</th>
-                  <th className="px-3 py-2">Would use</th>
-                  <th className="px-3 py-2">Confusing / comment</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {rows.filter((r) => !isFounderTest(r)).map((r) => (
-                  <tr key={r.id}>
-                    <td className="px-3 py-2 font-medium">{r.tester_label || "—"}</td>
-                    <td className="px-3 py-2">{r.device || "—"}</td>
-                    <td className="px-3 py-2">{r.steps_completed}/7</td>
-                    <td className="px-3 py-2">{r.task_completed ? "✓" : "✗"}</td>
-                    <td className="px-3 py-2">{r.ease}</td>
-                    <td className="px-3 py-2">{r.trust}</td>
-                    <td className="px-3 py-2">{r.would_use}</td>
-                    <td className="px-3 py-2 text-gray-700">
-                      {r.confusing ? <span className="block">⚠ {r.confusing}</span> : null}
-                      {r.comment ? <span className="block">“{r.comment}”</span> : null}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : !loading && !loadError ? (
-          <p className="mt-4 rounded-lg border border-dashed border-gray-300 p-4 text-sm text-gray-500">
-            No external tests saved yet.
-          </p>
-        ) : null}
-
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
-          <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <h3 className="text-sm font-semibold text-gray-900">Automated tests (regression suite, <code>npm test</code>)</h3>
-            <ul className="mt-2 space-y-1 text-sm text-gray-700">
-              {SOFTWARE_SUITES.map((t) => (
-                <li key={t.file}>
-                  <code className="text-xs">{t.file}</code> <span className="text-xs text-gray-400">W{t.week}</span> — {t.what}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-sm text-gray-700" data-testid="regression-last">
-              <span className="font-semibold">Live route regression (all 10 pages): </span>
-              {lastRun
-                ? `${lastRun.passed}/${lastRun.total} passed on ${lastRun.date}${lastRun.notes ? ` — ${lastRun.notes}` : ""}`
-                : "not run yet against the live URL."}
-            </p>
-          </div>
-          <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <h3 className="text-sm font-semibold text-gray-900">Manual full-site checklist (every Save button)</h3>
-            <ul className="mt-2 space-y-2 text-sm text-gray-700">
-              {MANUAL_CHECKS.map((m) => (
-                <li key={m.id} className="flex items-start gap-2">
-                  <span className={`mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${RESULT_PILL[m.result]}`}>{m.result}</span>
-                  <span>
-                    <strong>{m.id}</strong> <code className="text-xs">{m.page}</code> {m.check}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-2 text-xs text-gray-500">“pass” only with a Supabase Table Editor screenshot of the row.</p>
-          </div>
-        </div>
-      </section>
-
       {/* ---------- Tester form ---------- */}
-      <section id="tester-form" className="mt-14 scroll-mt-6">
-        <h2 className="text-xl font-bold text-gray-900">I finished the walkthrough</h2>
+      <section id="tester-form" className="mt-10 scroll-mt-6">
+        <h2 className="text-xl font-bold text-gray-900">I finished the tour</h2>
         <p className="mt-1 max-w-3xl text-sm text-gray-600">
           For external testers (18+). Takes 1 minute. Use a code like <strong>U4</strong> — please don&apos;t write your
           name or any personal or health information.
@@ -247,13 +144,13 @@ export default function DemoTesting() {
             </select>
           </label>
           <label className="text-sm font-medium text-gray-900">
-            How many of the 7 steps did you complete?
+            How many of the 5 steps did you complete?
             <select
               value={form.steps_completed}
               onChange={(e) => set("steps_completed")(e.target.value)}
               className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 font-normal"
             >
-              {[7, 6, 5, 4, 3, 2, 1, 0].map((n) => (
+              {[5, 4, 3, 2, 1, 0].map((n) => (
                 <option key={n} value={String(n)}>
                   {n}
                 </option>
@@ -333,6 +230,117 @@ export default function DemoTesting() {
           </div>
         </form>
       </section>
+      <div id="evaluators" className="mt-16 scroll-mt-6 border-t-2 border-gray-200 pt-10">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">For evaluators and investors</p>
+        <h2 className="mt-1 text-2xl font-bold text-gray-900">How Vitalis works, and whether it works</h2>
+        <p className="mt-1 max-w-3xl text-sm text-gray-600">
+          Testers can stop here. Below: test results, the agent map, the impact check and the V2 roadmap.
+        </p>
+      </div>
+      {/* ---------- Testing summary ---------- */}
+      <section id="testing" className="mt-8 scroll-mt-6">
+        <h2 className="text-xl font-bold text-gray-900">Testing summary</h2>
+        <p className="mt-1 max-w-3xl text-sm text-gray-600">
+          External users take the 5-step tour on their own device; their answers are read live from Supabase{" "}
+          <code>site_tests</code>. Nothing here is typed in by hand.
+        </p>
+
+        {loadError ? (
+          <p className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">
+            Could not read site_tests: {loadError}
+          </p>
+        ) : null}
+
+        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5" data-testid="testing-tiles">
+          {[
+            ["External testers", loading ? "…" : `${s.count} / ${s.target}`, s.targetMet ? "Target met" : "Target: 5"],
+            ["Completed the task", `${s.completedPct}%`, ""],
+            ["Ease (1–5)", s.count ? s.avgEase : "—", "average"],
+            ["Trust (1–5)", s.count ? s.avgTrust : "—", "average"],
+            ["Would use it", `${s.wouldUsePct}%`, "answered “yes”"],
+          ].map(([label, value, note]) => (
+            <div key={label} className="rounded-xl border border-gray-200 bg-white p-4">
+              <p className="text-xs font-medium text-gray-500">{label}</p>
+              <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
+              {note ? <p className="mt-1 text-xs text-gray-500">{note}</p> : null}
+            </div>
+          ))}
+        </div>
+
+        {rows.length > 0 ? (
+          <div className="mt-4 overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+                <tr>
+                  <th className="px-3 py-2">Tester</th>
+                  <th className="px-3 py-2">Device</th>
+                  <th className="px-3 py-2">Steps</th>
+                  <th className="px-3 py-2">Task</th>
+                  <th className="px-3 py-2">Ease</th>
+                  <th className="px-3 py-2">Trust</th>
+                  <th className="px-3 py-2">Would use</th>
+                  <th className="px-3 py-2">Confusing / comment</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {rows.filter((r) => !isFounderTest(r)).map((r) => (
+                  <tr key={r.id}>
+                    <td className="px-3 py-2 font-medium">{r.tester_label || "—"}</td>
+                    <td className="px-3 py-2">{r.device || "—"}</td>
+                    <td className="px-3 py-2">{r.steps_completed}/{DEMO_STEPS.length}</td>
+                    <td className="px-3 py-2">{r.task_completed ? "✓" : "✗"}</td>
+                    <td className="px-3 py-2">{r.ease}</td>
+                    <td className="px-3 py-2">{r.trust}</td>
+                    <td className="px-3 py-2">{r.would_use}</td>
+                    <td className="px-3 py-2 text-gray-700">
+                      {r.confusing ? <span className="block">⚠ {r.confusing}</span> : null}
+                      {r.comment ? <span className="block">“{r.comment}”</span> : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : !loading && !loadError ? (
+          <p className="mt-4 rounded-lg border border-dashed border-gray-300 p-4 text-sm text-gray-500">
+            No external tests saved yet.
+          </p>
+        ) : null}
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          <div className="rounded-xl border border-gray-200 bg-white p-4">
+            <h3 className="text-sm font-semibold text-gray-900">Automated tests (regression suite, <code>npm test</code>)</h3>
+            <ul className="mt-2 space-y-1 text-sm text-gray-700">
+              {SOFTWARE_SUITES.map((t) => (
+                <li key={t.file}>
+                  <code className="text-xs">{t.file}</code> <span className="text-xs text-gray-400">W{t.week}</span> — {t.what}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-sm text-gray-700" data-testid="regression-last">
+              <span className="font-semibold">Live route regression (all 10 pages): </span>
+              {lastRun
+                ? `${lastRun.passed}/${lastRun.total} passed on ${lastRun.date}${lastRun.notes ? ` — ${lastRun.notes}` : ""}`
+                : "not run yet against the live URL."}
+            </p>
+          </div>
+          <div className="rounded-xl border border-gray-200 bg-white p-4">
+            <h3 className="text-sm font-semibold text-gray-900">Manual full-site checklist (every Save button)</h3>
+            <ul className="mt-2 space-y-2 text-sm text-gray-700">
+              {MANUAL_CHECKS.map((m) => (
+                <li key={m.id} className="flex items-start gap-2">
+                  <span className={`mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${RESULT_PILL[m.result]}`}>{m.result}</span>
+                  <span>
+                    <strong>{m.id}</strong> <code className="text-xs">{m.page}</code> {m.check}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs text-gray-500">“pass” only with a Supabase Table Editor screenshot of the row.</p>
+          </div>
+        </div>
+      </section>
+
     </>
   );
 }

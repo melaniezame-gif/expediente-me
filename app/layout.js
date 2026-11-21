@@ -1,5 +1,6 @@
 import "./globals.css";
-import { ALL_PAGES, DEMO_LINK, NAV_GROUPS } from "@/lib/siteMap";
+import TourBar from "@/components/TourBar";
+import { ALL_PAGES, DEMO_LINK, MORE_NAV, PRIMARY_NAV } from "@/lib/siteMap";
 
 export const metadata = {
   title: "Vitalis — Medical Record",
@@ -21,21 +22,30 @@ export default function RootLayout({ children }) {
             <a href="/" className="text-lg font-bold text-gray-900">
               Vitalis
             </a>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-              {NAV_GROUPS.map((group) => (
-                <div key={group.label} className="flex items-center gap-3">
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">{group.label}</span>
-                  <ul className="flex gap-3 font-medium text-gray-700">
-                    {group.links.map((link) => (
-                      <li key={link.href}>
-                        <a href={link.href} className="hover:text-gray-900">
-                          {link.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-gray-700">
+              <ul className="flex gap-5">
+                {PRIMARY_NAV.map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href} className="hover:text-gray-900">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <details className="group relative">
+                <summary className="cursor-pointer list-none hover:text-gray-900">
+                  More <span aria-hidden="true">▾</span>
+                </summary>
+                <ul className="absolute right-0 z-40 mt-2 w-44 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                  {MORE_NAV.map((link) => (
+                    <li key={link.href}>
+                      <a href={link.href} className="block px-4 py-2 hover:bg-gray-50">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
               <a
                 href={DEMO_LINK.href}
                 className="rounded-full bg-emerald-700 px-4 py-1.5 font-semibold text-white hover:bg-emerald-800"
@@ -46,7 +56,11 @@ export default function RootLayout({ children }) {
           </nav>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <TourBar position="top" />
+          {children}
+          <TourBar position="bottom" />
+        </main>
 
         <footer className="mt-16 border-t border-gray-200 bg-gray-50">
           <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm sm:px-6 md:grid-cols-[1fr_2fr]">

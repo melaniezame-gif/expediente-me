@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { ALL_PAGES, AGENTS, DEMO_LINK, DEMO_STEPS, NAV_GROUPS } from "../lib/siteMap.js";
+import { ALL_PAGES, AGENTS, BEHIND_THE_SCENES, DEMO_LINK, DEMO_STEPS, MORE_NAV, PRIMARY_NAV, tourHref } from "../lib/siteMap.js";
 import { HARMS, ROADMAP, VALUE, viabilitySnapshot } from "../lib/impact.js";
 import { SCENARIOS, calculateRevenue } from "../lib/pricing.js";
 import {
@@ -21,9 +21,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const pageFile = (href) => path.join(root, "app", href === "/" ? "" : href.replace(/^\//, ""), "page.js");
 
 test("S1 — navigation integrity: every linked route has a page, no duplicates, demo + dashboard in nav", () => {
-  const navHrefs = NAV_GROUPS.flatMap((g) => g.links.map((l) => l.href)).concat(DEMO_LINK.href);
+  const navHrefs = [...PRIMARY_NAV, ...MORE_NAV].map((l) => l.href).concat(DEMO_LINK.href);
   const allHrefs = ALL_PAGES.map((p) => p.href);
-  const stepHrefs = DEMO_STEPS.map((s) => s.href);
+  const stepHrefs = DEMO_STEPS.map((s) => s.href).concat(BEHIND_THE_SCENES.map((l) => l.href));
 
   for (const href of new Set([...navHrefs, ...allHrefs, ...stepHrefs])) {
     assert.ok(existsSync(pageFile(href)), `missing page file for ${href}`);
@@ -34,10 +34,14 @@ test("S1 — navigation integrity: every linked route has a page, no duplicates,
   // Every page except the home page is in the header (home = the logo).
   for (const href of allHrefs.filter((h) => h !== "/")) assert.ok(navHrefs.includes(href), `${href} not in nav`);
   assert.equal(ALL_PAGES.length, 10);
-  assert.equal(DEMO_STEPS.length, 7);
+  // Iteration after tester U4: max 3 links in the header, 5 tour steps, one clear action each.
+  assert.ok(PRIMARY_NAV.length <= 3);
+  assert.equal(DEMO_STEPS.length, 5);
   for (const s of DEMO_STEPS) {
-    assert.ok(s.why && s.expected && s.tryThis.length >= 1, `step ${s.id} incomplete`);
+    assert.ok(s.expected && s.doThis.length >= 1 && s.doThis.length <= 2, `step ${s.id} incomplete`);
   }
+  assert.equal(tourHref(0), "/?tour=1");
+  assert.equal(tourHref(4), "/dashboard?tour=5");
 });
 
 test("S2 — dashboard logic: normalize, summarize, filter and export across tables", () => {
@@ -54,7 +58,7 @@ test("S2 — dashboard logic: normalize, summarize, filter and export across tab
     research: [{ id: "r1", created_at: "2026-11-01T08:00:00Z", source_type: "Interview", region: "CDMX", key_finding: "Caregivers use WhatsApp to share readings" }],
     pricing: [{ id: "p1", created_at: "2026-10-10T08:00:00Z", name: "Base", scenario_type: "Base", monthly_revenue: 24455 }],
     marketing: [{ id: "m1", created_at: "2026-10-20T08:00:00Z", asset_id: "P1", channel: "Instagram", title: "Is 93% oxygen bad?" }],
-    site_test: [{ id: "s1", created_at: "2026-11-21T08:00:00Z", tester_label: "U4", device: "phone", steps_completed: 7, task_completed: true, ease: 5, trust: 4, would_use: "yes" }],
+    site_test: [{ id: "s1", created_at: "2026-11-21T08:00:00Z", tester_label: "U4", device: "phone", steps_completed: 5, task_completed: true, ease: 5, trust: 4, would_use: "yes" }],
     ab: [
       { id: "a1", created_at: "2026-11-20T08:00:00Z", test_id: "hero_headline", variant: "A", event: "view", visitor_id: "v1" },
       { id: "a2", created_at: "2026-11-20T08:01:00Z", test_id: "hero_headline", variant: "A", event: "click", visitor_id: "v1" },
@@ -111,14 +115,14 @@ test("S3 — agents, impact, roadmap, viability and the external tester form", (
     assert.equal(v.monthlyRevenue, calculateRevenue(SCENARIOS[v.name]).monthlyRevenue);
   }
 
-  const good = { tester_label: " U4 ", device: "phone", steps_completed: "7", task_completed: true, ease: "5", trust: "4", would_use: "yes", confusing: "", comment: " Clear " };
+  const good = { tester_label: " U4 ", device: "phone", steps_completed: "5", task_completed: true, ease: "5", trust: "4", would_use: "yes", confusing: "", comment: " Clear " };
   assert.equal(validateSiteTest(good), "");
   assert.match(validateSiteTest({ ...good, ease: "0" }), /easy/);
   assert.match(validateSiteTest({ ...good, would_use: "" }), /yes, maybe or no/);
   assert.match(validateSiteTest({ ...good, tester_label: "Melanie Zamora" }), /not your name/);
   assert.match(validateSiteTest({ ...good, task_completed: undefined }), /completed/);
   assert.deepEqual(buildSiteTestRow(good), {
-    tester_label: "U4", device: "phone", steps_completed: 7, task_completed: true, ease: 5, trust: 4,
+    tester_label: "U4", device: "phone", steps_completed: 5, task_completed: true, ease: 5, trust: 4,
     would_use: "yes", confusing: null, comment: "Clear",
   });
 
