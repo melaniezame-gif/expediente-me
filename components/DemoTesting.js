@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase, supabaseConfigOk } from "@/lib/supabaseClient";
 import { SITE_TEST_TARGET, WOULD_USE, isFounderTest, buildSiteTestRow, summarizeSiteTests, validateSiteTest } from "@/lib/dashboard";
 import { DEMO_STEPS } from "@/lib/siteMap";
-import { MANUAL_CHECKS, REGRESSION_RUNS, SOFTWARE_SUITES } from "@/lib/testingLog";
+import { MANUAL_CHECKS, OBSERVATIONS, REGRESSION_RUNS, SOFTWARE_SUITES } from "@/lib/testingLog";
 
 const EMPTY = {
   tester_label: "",
@@ -306,6 +306,19 @@ export default function DemoTesting() {
             No external tests saved yet.
           </p>
         ) : null}
+
+        <div className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4">
+          <h3 className="text-sm font-semibold text-gray-900">What testers said (founder&apos;s notes) → what changed</h3>
+          <ul className="mt-2 space-y-3 text-sm text-gray-800">
+            {OBSERVATIONS.map((o) => (
+              <li key={o.who}>
+                <p className="font-semibold">{o.who}</p>
+                <p>{o.note}</p>
+                <p className="text-xs text-gray-600">→ {o.action}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <div className="rounded-xl border border-gray-200 bg-white p-4">
