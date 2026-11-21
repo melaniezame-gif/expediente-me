@@ -1,3 +1,26 @@
+const WEEK6_PROMPTS = [
+  {
+    title: "1 · Build Discipline Packet first (Gate 1)",
+    text: `Before writing any code, write docs/WEEK6_BUILD_PACKET.md for Week 6 "Integrated Agentic Venture + Impact & Viability": problem, user, success, UX concept with a wireframe image of /demo and /dashboard, scope cut (no accounts, no admin login, no LLM, no CI E2E), product spec R1–R10 with testable acceptance criteria, architecture with data flow, tech stack, DevOps, test plan (3 software tests + full-site regression + 5 external users) and the exact coding prompt. Commit it on its own.`,
+  },
+  {
+    title: "2 · One site map, dashboard logic, impact data, SQL and tests",
+    text: `Create lib/siteMap.js (NAV_GROUPS, ALL_PAGES with expected headings, 7 DEMO_STEPS, AGENTS with input/output/table/human checkpoint/ai), lib/impact.js (value with evidence, harms with mitigation + where + status, viabilitySnapshot() from lib/pricing.js, ROADMAP now/next/later with "why"), and lib/dashboard.js — pure: normalizeRecords across 8 tables, summarizeRecords, filterRecords, recordsToCSV, validateSiteTest, buildSiteTestRow, summarizeSiteTests. Write supabase_site.sql (site_tests, RLS insert/select for anon) and tests/site.test.mjs: S1 navigation integrity, S2 dashboard logic, S3 agents/impact/roadmap/tester form.`,
+  },
+  {
+    title: "3 · Full navigation + /dashboard",
+    text: `Rebuild the header from lib/siteMap.js as grouped nav (Try it / Venture / Build) with a highlighted Demo button and add a footer site map listing all 10 pages with their week. Build /dashboard: VentureDashboard reads all 8 Supabase tables in parallel (one failing table shows its own error and never hides the others), KPI tiles, a Stable/Review/Attention bar, one newest-first list with source chips, search, "needs human review only" and Export CSV.`,
+  },
+  {
+    title: "4 · /demo guided walkthrough, agent map, impact, roadmap, testing",
+    text: `Build /demo: DemoTour stepper (7 steps, why / try this / expected / Open ↗ in a new tab, Mark as done, Back / Done-next, progress bar), the agent map (inputs → agent cards coloured by rule / human / coding agent → Supabase tables), the practical impact check (value, harms table, viability snapshot), the V2 roadmap, a live testing summary from site_tests plus the software suites, regression result and manual checklist, and the "I finished the walkthrough" tester form that inserts into site_tests and shows the returned id or the real error.`,
+  },
+  {
+    title: "5 · Full-site regression + browser test, fix what breaks",
+    text: `Write scripts/regression.mjs: request every page in ALL_PAGES on a base URL and check 200, the expected heading and that the shared nav links to /demo and /dashboard; exit 1 on failure. Then run the production build against a mock Supabase in headless Chrome at 1280 px and 390 px: dashboard filter + search, tour to step 7, empty form submit, full form submit, no horizontal scroll. Fix every problem found.`,
+  },
+];
+
 const WEEK5_PROMPTS = [
   {
     title: "1 · Build Discipline Packet first (Gate 1)",
@@ -80,10 +103,18 @@ export default function DocsPage() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-2xl font-bold text-gray-900">Docs — Coding agent prompt log</h1>
       <p className="mt-2 text-sm text-gray-600">
-        Prompts sent to the coding agent (Claude) to build this project.
+        Prompts sent to the coding agent (Claude) to build this project, newest week first. Each week starts with a Build Discipline Packet in <code>docs/</code>, written before any code.
       </p>
 
-      <h2 className="mt-8 text-lg font-semibold text-gray-900">Week 5 — /chat guided assistant</h2>
+      <h2 className="mt-8 text-lg font-semibold text-gray-900">Week 6 — integrated venture: /demo + /dashboard</h2>
+      {WEEK6_PROMPTS.map((p) => (
+        <div key={p.title} className="mt-4 rounded-lg border border-gray-200 bg-white p-5">
+          <h3 className="text-sm font-semibold text-gray-900">{p.title}</h3>
+          <p className="mt-2 whitespace-pre-line text-sm text-gray-700">{p.text}</p>
+        </div>
+      ))}
+
+      <h2 className="mt-10 text-lg font-semibold text-gray-900">Week 5 — /chat guided assistant</h2>
       {WEEK5_PROMPTS.map((p) => (
         <div key={p.title} className="mt-4 rounded-lg border border-gray-200 bg-white p-5">
           <h3 className="text-sm font-semibold text-gray-900">{p.title}</h3>

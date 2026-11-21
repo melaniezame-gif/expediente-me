@@ -15,7 +15,9 @@ Live: https://expediente-me-wine.vercel.app
 | `/` | Week 4 — landing page with 2 live A/B tests (hero headline, CTA text) logged to Supabase `ab_events` |
 | `/marketing` | Week 4 — marketing engine: brand system, persona, landing copy, 10 social posts, 3 video scripts, 14-day calendar, A/B tester, Copy/Save/Export, saved assets in `marketing_assets`, dashboard widget |
 | `/chat` | Week 5 — Vitalis Guide: guided assistant with 3 intake questions, emergency check before numbers, human checkpoint, guardrails (emergency, self-harm, medicines, diagnosis, minors, personal data, off-topic), 👍/👎 in `chat_feedback`, test summaries in `chat_sessions`, review queue + widget |
-| `/docs` | Coding-agent prompt log |
+| `/dashboard` | Week 6 — every saved record from all 8 Supabase tables in one list: KPI tiles, triage status bar, source filter, search, needs-review filter, Export CSV |
+| `/demo` | Week 6 — 5-minute guided walkthrough of the whole venture (7 steps), agent map, practical impact check + viability, V2 roadmap, live testing summary, external tester form (`site_tests`) |
+| `/docs` | Coding-agent prompt log (Weeks 1–6) |
 
 ## Tech stack
 
@@ -34,9 +36,10 @@ Live: https://expediente-me-wine.vercel.app
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key, pasted once, no spaces>
    ```
 
-3. Run `supabase_setup.sql`, `supabase_research.sql`, `supabase_pricing.sql`, `supabase_marketing.sql` and `supabase_chat.sql` in the Supabase SQL Editor.
+3. Run `supabase_setup.sql`, `supabase_research.sql`, `supabase_pricing.sql`, `supabase_marketing.sql`, `supabase_chat.sql` and `supabase_site.sql` in the Supabase SQL Editor.
 4. `npm run dev`
 5. `npm test` runs the automated tests (Node's built-in test runner).
+6. `npm run regression -- https://expediente-me-wine.vercel.app` checks all 10 routes on the live site (status 200, heading, shared nav).
 
 ## Lesson from Week 1
 
