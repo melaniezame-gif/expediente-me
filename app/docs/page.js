@@ -19,6 +19,10 @@ const WEEK6_PROMPTS = [
     title: "5 · Full-site regression + browser test, fix what breaks",
     text: `Write scripts/regression.mjs: request every page in ALL_PAGES on a base URL and check 200, the expected heading and that the shared nav links to /demo and /dashboard; exit 1 on failure. Then run the production build against a mock Supabase in headless Chrome at 1280 px and 390 px: dashboard filter + search, tour to step 7, empty form submit, full form submit, no horizontal scroll. Fix every problem found.`,
   },
+  {
+    title: "6 · Fix from external user test U4 (Gate 3)",
+    text: `External tester U4 said the site is "very difficult to understand and use": too many icons and options in the header, it's not as simple as before, every tour step opened a different page in a new tab so it was hard to keep track, and in several steps they didn't know what to do. Fix all three: (1) header = only Triage, Chat, Dashboard + a "More" menu + "Take the tour"; (2) the instructions travel with the user — any page opened with ?tour=N shows "step N of 5", what to do and a Next step button at the top and at the end of the page, same tab, progress in sessionStorage; (3) 7 steps → 5 user steps (home, triage, chat, plans, dashboard) with at most 2 concrete actions each using the exact button names and values; research, pricing simulator, marketing and docs move to "Behind the scenes". Put the tester form right after the tour and everything for evaluators below it. Test every instruction in a real browser at 390 px.`,
+  },
 ];
 
 const WEEK5_PROMPTS = [
